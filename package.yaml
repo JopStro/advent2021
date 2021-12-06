@@ -24,6 +24,8 @@ dependencies:
 
 library:
   source-dirs: src
+  dependencies:
+    - containers
 
 executables:
   adventofcode2021-exe:
@@ -46,3 +48,4 @@ tests:
     - -with-rtsopts=-N
     dependencies:
     - adventofcode2021
+    - containers

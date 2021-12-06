@@ -33,7 +33,7 @@ interpolate xs = case checkPerp xs of
                   | otherwise = [n]
 
 findIntersections :: [Line] -> [Pos]
-findIntersections = map head . filter ((>1) . length) . group . sort . concatMap interpolate
+findIntersections = map head . filter (not . null) . map (tail . take 2) . group . sort . concatMap interpolate
 
 parseLines :: [String] -> [Line]
 parseLines = map (\xs -> [start xs, end xs])
