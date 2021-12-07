@@ -16,7 +16,6 @@ calcFuel x = foldl (\total (pos,freq) -> total + (sumOfNats (abs (pos - x)) * fr
 sumOfNats :: Int -> Int
 sumOfNats n =  ((n*n) + n) `div` 2
 
--- | some anon proved that the optimal position is within .5 of the mean, thanks
 meanKeys :: Map Int Int -> [Int]
 meanKeys m = [floor mean, ceiling mean]
   where
