@@ -1,28 +1,45 @@
 -- |
 
 module DaySeven where
-import Data.Map (Map, toList, insertWith)
+import Data.Map (Map, toList, fromList, insertWith)
+import Data.List (sortBy)
 
 countPositions :: [Int] -> Map Int Int
 countPositions = foldl (\m x -> insertWith (+) x 1 m) mempty
 
-findOptimalFuel :: Map Int Int -> Int
-findOptimalFuel m = minimum $ map (`calcFuel` m) $ meanKeys m
+findOptimalFuelp2 :: Map Int Int -> Int
+findOptimalFuelp2 m = (`calcFuel` m) $ meanKey m
+  where
+    calcFuel = calcFuelBy sumOfNats
 
-calcFuel :: Int -> Map Int Int -> Int
-calcFuel x = foldl (\total (pos,freq) -> total + (sumOfNats (abs (pos - x)) * freq)) 0 . toList
+findOptimalFuelp1 :: Map Int Int -> Int
+findOptimalFuelp1 m = (`calcFuel` m) $ medianKey m
+  where
+    calcFuel = calcFuelBy id
+
+calcFuelBy :: (Int -> Int) -> Int -> Map Int Int -> Int
+calcFuelBy f x = foldl (\total (pos,freq) -> total + (f (abs (pos - x)) * freq)) 0 . toList
 
 -- | the sum of natural numbers
 sumOfNats :: Int -> Int
 sumOfNats n =  ((n*n) + n) `div` 2
 
-meanKeys :: Map Int Int -> [Int]
-meanKeys m = [floor mean, ceiling mean]
+meanKey :: Map Int Int -> Int
+meanKey m = round mean
   where
     (amount,total) = foldr (\(k,x) (a,t) -> (x + a, (k*x) + t)) (0,0) $ toList m
     mean = fromIntegral total / fromIntegral amount :: Double
 
-examineFile :: String -> IO Int
+medianKey :: Map Int Int -> Int
+medianKey m = index (sortBy (\(k1,_) (k2,_) -> compare k1 k2) $ toList m) $ round middle
+  where
+    middle = (/2) . fromIntegral $ foldr (\(_,x) -> (x+)) 0 $ toList m :: Double
+    index ((k,x):xs) n | n <= x    = k
+                       | otherwise = index xs (n - x)
+    index _ _ = head . map fst $ toList m
+
+
+examineFile :: String -> IO [Int]
 examineFile xs = do
   positions <- countPositions . (\x -> read $ "["++x++"]") <$> readFile xs
-  return $ findOptimalFuel positions
+  return $ map (\f -> f positions) [findOptimalFuelp1, findOptimalFuelp2]
