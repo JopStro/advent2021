@@ -26,7 +26,8 @@ library:
   source-dirs: src
   dependencies:
     - containers
-    - parsec
+    - vector
+    - statistics
 
 executables:
   adventofcode2021-exe:
@@ -50,4 +51,5 @@ tests:
     dependencies:
     - adventofcode2021
     - containers
-    - parsec
+    - vector
+    - statistics
