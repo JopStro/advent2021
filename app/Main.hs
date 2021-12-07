@@ -1,7 +1,7 @@
 module Main where
 
-import DayFive
+import DaySeven
 import System.Environment
 
 main :: IO ()
-main = getArgs >>= findVents . head >>= print
+main = getArgs >>= examineFile . head >>= print
