@@ -7,7 +7,7 @@ import Statistics.Sample (mean)
 import Statistics.Function (sort)
 
 findOptimalFuelp2 :: Vector Int -> Int
-findOptimalFuelp2 xs = (`calcFuel` xs) $ meanPos xs
+findOptimalFuelp2 xs = minimum $ map (`calcFuel` xs) $ meanPositions xs
   where
     calcFuel = calcFuelBy sumOfNats
 
@@ -23,8 +23,8 @@ calcFuelBy f x = V.foldl (\total pos -> total + f (abs (pos - x))) 0
 sumOfNats :: Int -> Int
 sumOfNats n =  ((n*n) + n) `div` 2
 
-meanPos :: Vector Int -> Int
-meanPos = round . mean . V.map fromIntegral
+meanPositions :: Vector Int -> [Int]
+meanPositions vs = (map floor <> map ceiling) [mean $ V.map fromIntegral vs]
 
 medianPos :: Vector Int -> Int
 medianPos = floor . (\v -> sort v ! floor (fromIntegral (V.length v) / 2)) . V.map fromIntegral
