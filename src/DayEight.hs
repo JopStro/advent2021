@@ -20,11 +20,11 @@ mapUniques = fromList . foldl (\xs l -> case S.size l of
                                           _ -> xs) []
 
 mapNumbers :: [Set Char] -> Map Int (Set Char)
-mapNumbers xs = fst $ foldr mapValue (initialMap, nonUniques) [2,5,3,6,0,9]
+mapNumbers xs = fst $ foldl mapValue (initialMap, nonUniques) [9,0,6,3,5,2]
   where
     nonUniques = filter ((`elem` [5,6]) . S.size) xs
     initialMap = mapUniques xs
-    mapValue n (m,ys) = (M.insert n newpattern m, delete newpattern ys)
+    mapValue (m,ys) n = (M.insert n newpattern m, delete newpattern ys)
       where --This is acutally the order they are done in despite being a case statement
         newpattern = case n of
                        9 -> head $ filter ((m ! 4) `isSubsetOf`) $ filter ((==6) . S.size) ys
