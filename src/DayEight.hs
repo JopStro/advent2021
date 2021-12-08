@@ -1,48 +1,50 @@
 -- |
 
 module DayEight where
-import Data.List
-import Data.Map (Map, fromList, toList, (!))
+import Data.List hiding ((\\))
 import Data.Tuple
+import Data.Map (Map, fromList, toList, (!))
 import qualified Data.Map as M
+import Data.Set (Set, isSubsetOf, (\\))
+import qualified Data.Set as S
 
 filterUniques :: [String] -> [String]
 filterUniques = filter ((`elem` [2,3,4,7]) . length)
 
-mapUniques :: [String] -> Map Int String
-mapUniques = fromList . foldl (\xs l -> case length l of
+mapUniques :: [Set Char] -> Map Int (Set Char)
+mapUniques = fromList . foldl (\xs l -> case S.size l of
                                           2 -> (1, l) : xs
                                           3 -> (7, l) : xs
                                           4 -> (4, l) : xs
                                           7 -> (8, l) : xs
                                           _ -> xs) []
 
-mapNumbers :: [String] -> Map Int String
-mapNumbers xs = fst $ foldr mapValue (initialMap, nonUniques) [6,0,9,5,2,3]
+mapNumbers :: [Set Char] -> Map Int (Set Char)
+mapNumbers xs = fst $ foldr mapValue (initialMap, nonUniques) [2,5,3,6,0,9]
   where
-    nonUniques = filter ((`elem` [5,6]) . length) xs
+    nonUniques = filter ((`elem` [5,6]) . S.size) xs
     initialMap = mapUniques xs
     mapValue n (m,ys) = (M.insert n newpattern m, delete newpattern ys)
-      where
+      where --This is acutally the order they are done in despite being a case statement
         newpattern = case n of
-                       6 -> head $ filter ((==5) . length . (\\ (m ! 1))) $ filter ((==6) . length) ys
-                       0 -> head $ filter ((==4) . length . (\\ (m ! 1))) $ filter ((==6) . length) ys
-                       9 -> head $ filter ((==2) . length . (\\ (m ! 4))) $ filter ((==6) . length) ys
-                       5 -> head $ filter ((==2) . length . (\\ (m ! 4))) $ filter ((==5) . length) ys
-                       2 -> head $ filter ((==3) . length . (\\ (m ! 4))) $ filter ((==5) . length) ys
-                       3 -> head $ filter ((==3) . length . (\\ (m ! 1))) $ filter ((==5) . length) ys
+                       9 -> head $ filter ((m ! 4) `isSubsetOf`) $ filter ((==6) . S.size) ys
+                       0 -> head $ filter ((m ! 1) `isSubsetOf`) $ filter ((==6) . S.size) ys
+                       6 -> head $ filter ((==6) . S.size) ys
+                       3 -> head $ filter ((m ! 1) `isSubsetOf`) $ filter ((==5) . S.size) ys
+                       5 -> head $ filter (`isSubsetOf` (m ! 6)) $ filter ((==5) . S.size) ys
+                       2 -> head $ filter ((==5) . S.size) ys
 
 
-getDisplay :: [String] -> [String] -> Int
-getDisplay xs = read . concatMap (show . (mappedValues!) . sort)
+getDisplay :: [Set Char] -> [Set Char] -> Int
+getDisplay xs = read . concatMap (show . (mappedValues!))
   where
-    mappedValues = fromList . map swap . toList $ mapNumbers $ map sort xs
+    mappedValues = fromList . map swap . toList $ mapNumbers xs
 
 countUniques :: [String] -> [String] -> Int
 countUniques us = length . filter ((`elem` map sort (filterUniques us)) . sort)
 
-parseLine :: String -> ([String], [String])
-parseLine xs = (words left, words (tail right))
+parseLine :: String -> ([Set Char], [Set Char])
+parseLine xs = (map S.fromList $ words left, map S.fromList $ words (tail right))
   where
     (left, right) = break (=='|') xs
 
