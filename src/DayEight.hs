@@ -1,11 +1,11 @@
 -- |
 
 module DayEight where
-import Data.List hiding ((\\))
+import Data.List
 import Data.Tuple
 import Data.Map (Map, fromList, toList, (!))
 import qualified Data.Map as M
-import Data.Set (Set, isSubsetOf, (\\))
+import Data.Set (Set, isSubsetOf)
 import qualified Data.Set as S
 
 filterUniques :: [String] -> [String]
