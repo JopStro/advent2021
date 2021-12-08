@@ -25,12 +25,12 @@ mapNumbers xs = fst $ foldr mapValue (initialMap, nonUniques) [6,0,9,5,2,3]
     mapValue n (m,ys) = (M.insert n newpattern m, delete newpattern ys)
       where
         newpattern = case n of
-                       9 -> head $ filter ((==2) . length . (\\ (m ! 4))) $ filter ((==6) . length) ys
                        6 -> head $ filter ((==5) . length . (\\ (m ! 1))) $ filter ((==6) . length) ys
                        0 -> head $ filter ((==4) . length . (\\ (m ! 1))) $ filter ((==6) . length) ys
-                       3 -> head $ filter ((==3) . length . (\\ (m ! 1))) $ filter ((==5) . length) ys
+                       9 -> head $ filter ((==2) . length . (\\ (m ! 4))) $ filter ((==6) . length) ys
                        5 -> head $ filter ((==2) . length . (\\ (m ! 4))) $ filter ((==5) . length) ys
                        2 -> head $ filter ((==3) . length . (\\ (m ! 4))) $ filter ((==5) . length) ys
+                       3 -> head $ filter ((==3) . length . (\\ (m ! 1))) $ filter ((==5) . length) ys
 
 
 getDisplay :: [String] -> [String] -> Int
