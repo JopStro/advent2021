@@ -12,7 +12,7 @@ import Data.List (sortBy)
 calculateRisk :: Int -> Int -> Vector (Vector Int) -> Int
 calculateRisk x y v | y >= V.length v           = 0
                     | x >= V.length (v ! y)     = calculateRisk 0 (y+1) v
-                    | isLow                     = 1 + val + calculateRisk (x+1) y v
+                    | isLow                     = 1 + val + calculateRisk (x+2) y v
                     | otherwise                 = calculateRisk (x+1) y v
   where
     val = v ! y ! x
@@ -25,7 +25,7 @@ calculateRisk x y v | y >= V.length v           = 0
 getBasins :: Int -> Int -> Vector (Vector Int) -> [Int]
 getBasins x y v | y >= V.length v           = []
                 | x >= V.length (v ! y)     = getBasins 0 (y+1) v
-                | isLow                     = S.size (findBasin x y v mempty) : getBasins (x + 1) y v
+                | isLow                     = S.size (findBasin x y v mempty) : getBasins (x+2) y v
                 | otherwise                 = getBasins (x+1) y v
   where
     val = v ! y ! x
