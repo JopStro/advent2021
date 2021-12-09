@@ -1,7 +1,7 @@
 -- |
 
 module DayNine where
-import Data.Vector hiding (map, length, product, take)
+import Data.Vector (Vector, fromList, (!), (!?))
 import qualified Data.Vector as V
 import Data.Set (Set, member)
 import qualified Data.Set as S
