@@ -1,6 +1,6 @@
 module Main where
 
-import DayEight
+import DayNine
 import System.Environment
 
 main :: IO ()
