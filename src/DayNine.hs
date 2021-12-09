@@ -26,7 +26,7 @@ getBasins :: Int -> Int -> Vector (Vector Int) -> [Int]
 getBasins x y v | y >= V.length v           = []
                 | x >= V.length (v ! y)     = getBasins 0 (y+1) v
                 | isLow                     = S.size (findBasin x y v mempty) : getBasins (x + 1) y v
-                | otherwise                 = getBasins (x + 1) y v
+                | otherwise                 = getBasins (x+1) y v
   where
     val = v ! y ! x
     up = fromMaybe 9 ((v !? (y-1)) >>= (!? x))
