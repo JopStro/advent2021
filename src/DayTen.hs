@@ -6,9 +6,6 @@ import Data.List
 
 type Stack = [Char]
 
-opening :: [Char]
-opening = "([{<"
-
 close :: Char -> Maybe Char
 close '(' = Just ')'
 close '[' = Just ']'
