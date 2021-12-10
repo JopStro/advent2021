@@ -1,6 +1,8 @@
 -- |
 
 module DayTen where
+import Data.Bifunctor
+import Data.Functor
 import Data.Either
 import Data.List
 
@@ -38,6 +40,7 @@ calculateCompletionScore xs = lineScores !! (length lineScores `div` 2)
     lineScores = sort $ map (foldl (\total x -> total * 5 + snd (score x)) 0) xs
 
 validateFile :: String -> IO (Int,Integer)
-validateFile xs = do
-  (corrupt, incomplete) <- partitionEithers . map (`checkSyntax` []) . lines <$> readFile xs
-  return (calculateScore corrupt, calculateCompletionScore incomplete)
+validateFile xs = lines <$> readFile xs
+                  <&> map (`checkSyntax` [])
+                  <&> partitionEithers
+                  <&> bimap calculateScore calculateCompletionScore
