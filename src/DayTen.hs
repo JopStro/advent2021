@@ -39,11 +39,9 @@ calculateCompletionScore xs = lineScores !! (length lineScores `div` 2)
   where
     lineScores = sort $ map (foldl (\total x -> total * 5 + snd (score x)) 0) xs
 
-(.>) :: (a -> b) -> (b -> c) -> a -> c
-(.>) = flip (.)
 
 validateFile :: String -> IO (Int,Integer)
 validateFile xs = lines <$> readFile xs
                   <&> map (`checkSyntax` [])
-                  .> partitionEithers
-                  .> bimap calculateScore calculateCompletionScore
+                  <&> partitionEithers
+                  <&> bimap calculateScore calculateCompletionScore
