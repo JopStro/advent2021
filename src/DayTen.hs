@@ -36,11 +36,11 @@ calculateScore :: [Char] -> Int
 calculateScore = foldl (\total x -> total + fst (score x)) 0
 
 calculateCompletionScore :: [String] -> Integer
-calculateCompletionScore xs = lineScores !! (ceiling (fromIntegral (length xs) / 2 :: Double) - 1)
+calculateCompletionScore xs = lineScores !! (length lineScores `div` 2)
   where
-    lineScores = sort $ map (foldl (\total x -> (total * 5) + snd (score x)) 0) xs
+    lineScores = sort $ map (foldl (\total x -> total * 5 + snd (score x)) 0) xs
 
 validateFile :: String -> IO (Int,Integer)
 validateFile xs = do
-  errors <- map (`checkSyntax` []) . lines <$> readFile xs
-  return (calculateScore $ lefts errors, calculateCompletionScore $ rights errors)
+  (corrupt, incomplete) <- partitionEithers . map (`checkSyntax` []) . lines <$> readFile xs
+  return (calculateScore corrupt, calculateCompletionScore incomplete)
