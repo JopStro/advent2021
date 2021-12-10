@@ -1,7 +1,7 @@
 module Main where
 
-import DayNine
+import DayTen
 import System.Environment
 
 main :: IO ()
-main = getArgs >>= analyse . head >>= print
+main = getArgs >>= validateFile . head >>= print
