@@ -1,7 +1,7 @@
 module Main where
 
-import DayTen
+import DayEleven
 import System.Environment
 
 main :: IO ()
-main = getArgs >>= validateFile . head >>= print
+main = getArgs >>= glow . head >>= print
