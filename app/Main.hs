@@ -1,7 +1,7 @@
 module Main where
 
-import DayEleven
+import DayTwelve
 import System.Environment
 
 main :: IO ()
-main = getArgs >>= glow . head >>= print
+main = getArgs >>= pathFinding . head >>= print
