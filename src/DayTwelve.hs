@@ -16,12 +16,14 @@ stringToNode xs | isUpper $ head xs = Big xs
                 | otherwise = Small xs
 
 mapGraph :: [(String,String)] -> Map Node [Node]
-mapGraph = fromListWith (++) . map (second (:[])) . filter (fst . first (/=End)) . filter (snd . second (/=Start)) . doubleUp . map (bimap stringToNode stringToNode)
+mapGraph = fromListWith (++) . map (second (:[])) . filter (fst . first (/=End)) . doubleUp . map (bimap stringToNode stringToNode)
   where
     doubleUp xs = xs ++ map swap xs
 
 findPaths :: Map Node [Node] -> [Node] -> Bool -> Node -> Int
 findPaths _ _ _ End = 1
+findPaths m path dups Start | null path = sum $ map (findPaths m path dups) (m ! Start)
+                            | otherwise = 0
 findPaths m path False n = sum $ map (findPaths m (n:path) False) ((m ! n) \\ filter (\case
                                                                                        Small _ -> True
                                                                                        _ -> False) path)
