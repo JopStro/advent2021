@@ -20,16 +20,16 @@ mapGraph = fromListWith (++) . map (second (:[])) . filter (fst . first (/=End))
   where
     doubleUp xs = xs ++ map swap xs
 
-sansDups :: Map Node [Node] -> [Node] -> Node -> [Node]
-sansDups m path n = (m ! n) \\ filter (\case
-                                          Small _ -> True
-                                          _ -> False) path
+filterSmalls :: [Node] -> [Node]
+filterSmalls = filter (\case
+                          Small _ -> True
+                          _ -> False)
 
 findPaths :: Map Node [Node] -> [Node] -> Bool -> Node -> Int
 findPaths _ _ _ End = 1
 findPaths m path dups Start | null path = sum $ map (findPaths m path dups) (m ! Start)
                             | otherwise = 0
-findPaths m path False n = sum $ map (findPaths m (n:path) False) $ sansDups m path n
+findPaths m path False n = sum $ map (findPaths m (n:path) False) ((m ! n) \\ filterSmalls path)
 findPaths m path True n = sum $ map (\case
                                          Small x | Small x `elem` path -> findPaths m (n:path) False (Small x)
                                          x -> findPaths m (n:path) True x) (m ! n)
