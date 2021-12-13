@@ -2,7 +2,7 @@
 
 module DaySix where
 
-import Data.IntMap.Strict (IntMap, insertWith, toList, fromListWith)
+import Data.IntMap (IntMap, insertWith, toList, fromListWith)
 
 simFile :: String -> IO Integer
 simFile xs = do
