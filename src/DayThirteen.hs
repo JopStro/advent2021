@@ -4,7 +4,6 @@ module DayThirteen where
 import Data.Bifunctor
 import Data.Set (Set, fromList, toList, size)
 import qualified Data.Set as S
-import Data.List
 import Data.Tuple
 
 data Line = X Int | Y Int
@@ -32,5 +31,5 @@ drawPaper (x,y) ((x0,y0):ps) = (if y == y0
 foldPaper :: String -> IO Int
 foldPaper xs = do
   (paper,folds) <- bimap (fromList . map readPos) (map readLine) . break ((=="fold") . take 4) . filter (not . null) . lines <$> readFile xs
-  drawPaper (0,0) $ map swap $ sort $ map swap $ toList $ foldl fold paper folds
+  drawPaper (0,0) $ map swap $ toList $ S.map swap $ foldl fold paper folds
   return $ size $ fold paper (head folds)
