@@ -26,24 +26,25 @@ cull method i xss | i >= length (head xss) = cull method 0 xss
                   | otherwise = cull method (i+1) $ case method of
                                                       NoInvert -> filter (\xs -> (xs !! i) == filterVal) xss
                                                       Invert -> filter (\xs -> (xs !! i) /= filterVal) xss
-                                                where
-                                                  filterVal = gamma (transpose xss) !! i
+  where
+    filterVal = gamma (transpose xss) !! i
 
-oxygen :: [[Int]] -> Int
+oxygen :: [[Int]] -> Integer
 oxygen = decimate . head . cull NoInvert 0
 
-co2 :: [[Int]] -> Int
+co2 :: [[Int]] -> Integer
 co2 = decimate . head . cull Invert 0
 
-decimate :: [Int] -> Int
+decimate :: [Int] -> Integer
 decimate [] = 0
-decimate (x:xs) = unit * x + decimate xs
+decimate (x:xs) = unit * fromIntegral x + decimate xs
   where
     unit = 2 ^ length xs
 
-diagnose :: String -> IO Int
+diagnose :: String -> IO (Integer,Integer)
 diagnose xs = do
   report <- map (map digitToInt) . lines <$> readFile xs
+  let gam = gamma (transpose report)
   let oxy = oxygen report
   let carb = co2 report
-  return $ oxy * carb
+  return (decimate gam * decimate (invert gam),oxy * carb)
