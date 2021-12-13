@@ -1,6 +1,6 @@
 -- |
 
-module DayThree where
+module DayThree (diagnose) where
 
 import Data.List
 import Data.Char

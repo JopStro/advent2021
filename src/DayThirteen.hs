@@ -1,6 +1,6 @@
 -- |
 
-module DayThirteen where
+module DayThirteen (foldPaper) where
 import Data.Bifunctor
 import Data.Set (Set, fromList, toList, size)
 import qualified Data.Set as S

@@ -1,6 +1,6 @@
 -- |
 
-module DayTwo where
+module DayTwo (runMovementScript) where
 
 import Data.Char (toUpper)
 

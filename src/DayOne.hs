@@ -1,6 +1,6 @@
 -- |
 
-module DayOne where
+module DayOne (floorSteepness) where
 
 import Data.List
 

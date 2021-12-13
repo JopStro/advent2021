@@ -1,6 +1,6 @@
 -- |
 
-module DayEight where
+module DayEight (analyse) where
 import Data.List
 import Data.Tuple
 import Data.Map (Map, fromList, toList, (!))

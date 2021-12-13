@@ -1,5 +1,5 @@
 
-module DayEleven where
+module DayEleven (glow) where
 import Data.Vector (Vector, fromList, toList, (!), (!?), (//))
 import qualified Data.Vector as V
 import Data.Char
@@ -31,9 +31,8 @@ insert2d v (x,y) n = v // [(y,(v ! y) // [(x, n)])]
 isSync :: Vector (Vector Octopus) -> Bool
 isSync = all (==0) . concatMap toList . toList
 
-glow :: String -> IO Int
+glow :: String -> IO (Int,Int)
 glow xs = do
   initialState <- fromList . map (fromList . map digitToInt) . lines <$> readFile xs
   let states = iterate step (initialState, 0)
-  putStr $ unlines $ take 100 $ tail $ map (show . snd) states
-  return $ snd (states !! 100)
+  return (snd (states !! 100), length $ takeWhile (not . isSync . fst) states)

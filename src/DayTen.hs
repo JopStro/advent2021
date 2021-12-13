@@ -1,6 +1,6 @@
 -- |
 
-module DayTen where
+module DayTen (validateFile) where
 import Data.Bifunctor
 import Data.Functor
 import Data.Either

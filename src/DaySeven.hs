@@ -1,6 +1,6 @@
 -- |
 
-module DaySeven where
+module DaySeven (examineFile) where
 import Data.Vector.Unboxed (Vector, fromList, (!))
 import qualified Data.Vector.Unboxed as V
 import Statistics.Sample (mean)

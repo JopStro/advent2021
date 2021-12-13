@@ -1,6 +1,6 @@
 -- |
 
-module DayFive where
+module DayFive (findVents) where
 
 import Control.Applicative
 import Data.Bool

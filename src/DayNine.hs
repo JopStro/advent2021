@@ -1,6 +1,6 @@
 -- |
 
-module DayNine where
+module DayNine (analyse) where
 import Data.Vector (Vector, fromList, (!), (!?))
 import qualified Data.Vector as V
 import Data.Set (Set, member)

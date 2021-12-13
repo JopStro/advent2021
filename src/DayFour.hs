@@ -1,20 +1,20 @@
 -- |
 
-module DayFour where
+module DayFour (bingo) where
 
 import Data.List
 import Data.Maybe
 
-bingo :: FilePath -> IO (Int,Int)
-bingo xs = do
+bingo :: FilePath -> Int -> IO (Int,Int)
+bingo xs n = do
   (rawdraw:rawboards) <- filter (not . null) . lines <$> readFile xs
   let draw = read $ "["++rawdraw++"]"
-  let boards = parseBoards rawboards
+  let boards = parseBoards n rawboards
   let (winningscore:scores) = play draw boards
   return (winningscore, last scores)
 
-parseBoards :: [String] -> [[[Maybe Int]]]
-parseBoards = unfoldr (\s -> if null s then Nothing else Just $ splitAt 5 s) . map (map (Just . read) . words)
+parseBoards :: Int -> [String] -> [[[Maybe Int]]]
+parseBoards n = unfoldr (\s -> if null s then Nothing else Just $ splitAt n s) . map (map (Just . read) . words)
 
 play :: [Int] -> [[[Maybe Int]]] -> [Int]
 play [] _ = []
@@ -27,4 +27,4 @@ play (x:xs) boards = map calcScore winners ++ play xs remaining
 partWinners :: [[[Maybe Int]]] -> ([[[Maybe Int]]], [[[Maybe Int]]])
 partWinners = partition check
   where
-    check = elem [] . map catMaybes . (id <> transpose)
+    check = any (null . catMaybes) . (id <> transpose)

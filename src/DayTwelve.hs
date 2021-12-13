@@ -1,6 +1,6 @@
 {-# LANGUAGE LambdaCase #-}
 
-module DayTwelve where
+module DayTwelve (pathFinding) where
 import Data.Bifunctor
 import Data.Map (Map, fromListWith, (!))
 import Data.Char

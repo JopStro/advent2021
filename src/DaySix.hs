@@ -1,6 +1,6 @@
 -- |
 
-module DaySix where
+module DaySix (simFile) where
 
 import Data.IntMap (IntMap, insertWith, toList, fromListWith)
 
