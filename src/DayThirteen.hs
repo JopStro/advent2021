@@ -9,9 +9,9 @@ import Data.Tuple
 data Line = X Int | Y Int
 type Pos = (Int,Int)
 
-fold :: Set Pos -> Line -> Set Pos
-fold grid (X line) = S.map (\(x,y) -> if x > line then (line - (x - line),y) else (x,y)) grid
-fold grid (Y line) = S.map (\(x,y) -> if y > line then (x,line - (y - line)) else (x,y)) grid
+fold :: Line -> Set Pos -> Set Pos
+fold (X line) = S.map $ \(x,y) -> if x > line then (line - (x - line),y) else (x,y)
+fold (Y line) = S.map $ \(x,y) -> if y > line then (x,line - (y - line)) else (x,y)
 
 readPos :: String -> Pos
 readPos xs = read ("("++xs++")")
@@ -31,5 +31,5 @@ drawPaper (x,y) ((x0,y0):ps) = (if y == y0
 foldPaper :: String -> IO Int
 foldPaper xs = do
   (paper,folds) <- bimap (fromList . map readPos) (map readLine) . break ((=="fold") . take 4) . filter (not . null) . lines <$> readFile xs
-  drawPaper (0,0) $ map swap $ toList $ S.map swap $ foldl fold paper folds
-  return $ size $ fold paper (head folds)
+  drawPaper (0,0) $ map swap $ toList $ S.map swap $ foldl (flip fold) paper folds
+  return $ size $ fold (head folds) paper
