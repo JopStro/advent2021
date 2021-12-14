@@ -18,7 +18,7 @@ mapPatterns (x:y:xs) = insertWith (+) [x,y] 1 $ mapPatterns (y:xs)
 mapRules :: [String] -> Map String Char
 mapRules = fromList . map ((\xs -> (head xs, head $ last xs)) . words)
 
--- | don't question it, it works and that's all that matters
+-- | don't question it, head doesn't work but last does
 countLetters :: [(String,Int)] -> Map Char Int
 countLetters = fromListWith (+) . map (first last)
 
