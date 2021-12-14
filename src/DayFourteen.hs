@@ -19,12 +19,13 @@ mapRules :: [String] -> Map String Char
 mapRules = fromList . map ((\xs -> (head xs, head $ last xs)) . words)
 
 countLetters :: [(String,Int)] -> Map Char Int
-countLetters = fromListWith (+) . map (first last)
+countLetters = fromListWith (+) . map (first head)
 
 polymerize :: String -> IO (Int,Int)
 polymerize xs = do
-  (initialState,rules) <- bimap (mapPatterns . head) mapRules . splitAt 2 . lines <$> readFile xs
+  (initialString:_,rules) <- second mapRules . splitAt 2 . lines <$> readFile xs
+  let initialState = mapPatterns initialString
   let steps = iterate (fromListWith (+) . step rules . toList) initialState
-  let frequenciesp1 = map snd . toList . countLetters . toList $ (steps !! 10)
-  let frequenciesp2 = map snd . toList . countLetters . toList $ (steps !! 40)
+  let frequenciesp1 = map snd . toList . insertWith (+) (last initialString) 1 . countLetters $ toList (steps !! 10)
+  let frequenciesp2 = map snd . toList . insertWith (+) (last initialString) 1 . countLetters $ toList (steps !! 40)
   return (maximum frequenciesp1 -  minimum frequenciesp1,maximum frequenciesp2 - minimum frequenciesp2)
