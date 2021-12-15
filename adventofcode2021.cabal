@@ -27,6 +27,7 @@ library
   exposed-modules:
       DayEight
       DayEleven
+      DayFifteen
       DayFive
       DayFour
       DayFourteen
