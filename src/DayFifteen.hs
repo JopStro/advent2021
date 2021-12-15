@@ -17,13 +17,13 @@ type Graph = Vector (Vector Int)
 
 dijkstra :: DijkstraData -> Graph -> Int
 dijkstra (spFinal,spMap) v | (V.length v * V.length v) == M.size spFinal = spFinal ! (\n -> (n,n)) (V.length v -1)
-                          | M.null spMap = dijkstra (spFinal, M.fromList [((0,0), 0)]) v
-                          | otherwise = let ((x,y),sp) = fromMapByPath spMap
-                                        in dijkstra (M.insert (x,y) sp spFinal
-                                                    , foldl (\m (k,n) -> if k `notMember` spFinal
-                                                                         then
-                                                                           M.insertWith min k n m
-                                                                         else m) (M.delete (x,y) spMap) $ adjacents (x,y) sp v) v
+                           | M.null spMap = dijkstra (spFinal, M.fromList [((0,0), 0)]) v
+                           | otherwise = let ((x,y),sp) = fromMapByPath spMap
+                                         in dijkstra (M.insert (x,y) sp spFinal
+                                                     , foldl (\m (k,n) -> if k `notMember` spFinal
+                                                                          then
+                                                                            M.insertWith min k n m
+                                                                          else m) (M.delete (x,y) spMap) $ adjacents (x,y) sp v) v
 
 
 adjacents :: Pos -> Int -> Graph -> [(Pos, Int)]
@@ -34,6 +34,8 @@ adjacents (x,y) sp v = catMaybes [(\(x1,y1) -> v !? y1 >>= (!? x1) <&> (+sp) <&>
 
 fromMapByPath :: Map Pos Int -> (Pos,Int)
 fromMapByPath = minimumBy (\x y -> compare (snd x) (snd y)) . M.toList
+
+
 
 genPart2 :: [[Int]] -> [[Int]]
 genPart2 = concat . take 5 . iterate (map (map step)) . map (concat . take 5 . iterate (map step))
