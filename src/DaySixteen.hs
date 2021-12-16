@@ -6,31 +6,12 @@ import Data.Bits
 import Data.Bifunctor
 import Data.List
 import Data.Function
+import Data.Char
 
 hexToList :: Char -> [Bool]
-hexToList x = case x of
-                '0' -> map bitToBool "0000"
-                '1' -> map bitToBool "0001"
-                '2' -> map bitToBool "0010"
-                '3' -> map bitToBool "0011"
-                '4' -> map bitToBool "0100"
-                '5' -> map bitToBool "0101"
-                '6' -> map bitToBool "0110"
-                '7' -> map bitToBool "0111"
-                '8' -> map bitToBool "1000"
-                '9' -> map bitToBool "1001"
-                'A' -> map bitToBool "1010"
-                'B' -> map bitToBool "1011"
-                'C' -> map bitToBool "1100"
-                'D' -> map bitToBool "1101"
-                'E' -> map bitToBool "1110"
-                'F' -> map bitToBool "1111"
-                _ -> error "Not a hex digit"
-
-bitToBool :: Char -> Bool
-bitToBool '0' = False
-bitToBool '1' = True
-bitToBool _ = error "not a bit"
+hexToList = toList . digitToInt
+  where
+    toList i = reverse [i `testBit` p | p <- [0..3]]
 
 intBool :: Bool -> Int
 intBool = bool 0 1
@@ -57,15 +38,15 @@ handlePacket' ver t (False:xs) = (ver + vsum,val,rest)
   where
     (len,slen) = chopInt 15 xs
     (content,rest) = splitAt len slen
-    f = functionFromType t
-    (vsum,val) = foldl1 (\(ver0,val0) (ver1,val1) -> (ver0 + ver1, val0 `f` val1))
+    (><) = functionFromType t
+    (vsum,val) = foldl1 (\(ver0,val0) (ver1,val1) -> (ver0 + ver1, val0 >< val1))
                  $ unfoldr (\ys -> if null ys then Nothing else
                                      handlePacket ys & \(v, n, r) -> Just ((v,n),r)) content
 handlePacket' ver t (True:xs) = (ver+vsum,val,rest)
   where
     (q,sq) = chopInt 11 xs
-    f = functionFromType t
-    (vsum,val,rest) = foldl1 (\(ver0,val0,_) (ver1,val1,r) -> (ver0 + ver1, val0 `f` val1,r))
+    (><) = functionFromType t
+    (vsum,val,rest) = foldl1 (\(ver0,val0,_) (ver1,val1,r) -> (ver0 + ver1, val0 >< val1,r))
                       $ take q $ unfoldr (\ys -> if null ys then Nothing else
                                                    handlePacket ys & \(v, n, r) -> Just ((v,n,r),r)) sq
 handlePacket' _ _ _ = error "Unreachable"
