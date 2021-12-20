@@ -18,6 +18,7 @@ import DayFifteen
 import DaySixteen
 import DaySeventeen
 import DayEighteen
+import DayTwenty
 import System.Environment
 
 main :: IO ()
@@ -42,6 +43,7 @@ runDay 15 (f:_)  = DayFifteen.pathFile f >>= print
 runDay 16 (f:_)  = DaySixteen.readPacket f >>= print
 runDay 17 (f:_)  = DaySeventeen.trickshot f >>= print
 runDay 18 (f:_)  = DayEighteen.sumSnails f >>= print
+runDay 20 (f:_)  = DayTwenty.enhanceFile f >>= print
 runDay _ []      = print "Invalid arguments: provide input file"
 runDay 4 _       = print "Invalid Arguments: provide bingo card height"
 runDay _ _       = print "Day not implemented"
