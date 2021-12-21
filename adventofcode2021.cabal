@@ -43,6 +43,7 @@ library
       DayThree
       DayTwelve
       DayTwenty
+      DayTwentyOne
       DayTwo
   other-modules:
       Paths_adventofcode2021
