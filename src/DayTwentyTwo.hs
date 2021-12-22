@@ -45,4 +45,4 @@ checkSize (Rect (minx,maxx) (miny,maxy) (minz,maxz)) = all ((<=limit) . abs) [mi
 
 fixReactor :: String -> IO Int
 fixReactor xs = sweep (-limit,-limit,-limit) ((-limit,limit),(-limit,limit),(-limit,limit))
-                . reverse . readRects . lines <$> readFile xs
+                . filter (checkSize . snd) . reverse . readRects . lines <$> readFile xs
