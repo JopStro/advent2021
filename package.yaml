@@ -28,6 +28,7 @@ library:
     - containers
     - vector
     - statistics
+    - matrix
 
 executables:
   adventofcode2021-exe:
@@ -53,3 +54,4 @@ tests:
     - containers
     - vector
     - statistics
+    - matrix
